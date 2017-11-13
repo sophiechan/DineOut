@@ -12,7 +12,7 @@
 		<tbody>
 			{% for ele in data %}
 				<tr>
-					<td>{{ ele.name }}</td>
+					<td><a href="/restaurants/{{ele.restid}}">{{ ele.name }}</a></td>
 					<td>{{ ele }}</td>
 				</tr>
 			{% endfor %}
