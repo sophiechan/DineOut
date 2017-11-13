@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block body %}
+	{{ super() }}
+	<table class="table">
+		<caption>Personal Lists</caption>
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Name</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for ele in data %}
+				<tr>
+					<td>{{ ele.restid }}</td>
+					<td><a href="/perlists/{{ele.lid}}">{{ele.name}}</a></td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}
