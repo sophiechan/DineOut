@@ -5,15 +5,26 @@
 		<caption>Restaurants</caption>
 		<thead>
 			<tr>
+				<th>Id</th>
 				<th>Name</th>
-				<th>Infomation</th>
+				<th>StreetName</th>
+				<th>City</th>
+				<th>State</th>
+				<th>PostalCode</th>
+				<th>Stars</th>
 			</tr>
 		</thead>
 		<tbody>
 			{% for ele in data %}
 				<tr>
-					<td><a href="/restaurants/{{ele.restid}}">{{ ele.name }}</a></td>
-					<td>{{ ele }}</td>
+					<td>{{ ele.restid }}</td>
+					<td><a href="/restaurants/{{ele.restid}}">{{ele.name}}</a></td>
+					<td>{{ ele.name }}</td>
+					<td>{{ ele.street_name }}</td>
+					<td>{{ ele.city }}</td>
+					<td>{{ ele.state }}</td>
+					<td>{{ ele.postal_code }}</td>
+					<td>{{ ele.stars }}</td>
 				</tr>
 			{% endfor %}
 		</tbody>
