@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+{% block body %}
+	{{ super() }}
+	<table class="table">
+		<caption>Restaurants</caption>
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Infomation</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for ele in data %}
+				<tr>
+					<td>{{ ele.name }}</td>
+					<td>{{ ele }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}
+
+<!-- <!DOCTYPE html>
+<html>
+	<head>
+		<title>DineOut</title>
+		<script src="https://use.fontawesome.com/5f75b94b03.js"></script>
+		<link rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+			integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+			crossorigin="anonymous">
+		<link rel='stylesheet' href='/stylesheets/style.css'/>
+		<link rel='stylesheet' href='/stylesheets/uploadStyle.css'/>
+		<link rel='stylesheet' href='/stylesheets/sign_bg_style.css'/>
+	</head>
+	<body>
+		<script src="https://code.jquery.com/jquery-1.12.4.min.js"
+			integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+			crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+			integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+			crossorigin="anonymous"></script>
+
+	<h1>Some famous Computer Scientists</h1>
+	<div>{{ data }}</div>
+
+	</body>
+</html>
+ -->
+<!-- <html>
+	<style>
+		body{ 
+			font-size: 15pt;
+			font-family: arial;
+		}
+	</style>
+
+
+<body>
+	<h1>Some famous Computer Scientists</h1>
+	<div>{{data}}</div>
+
+	<div>
+		{% for n in data %}
+		<div>{{n}}</div>
+		{% endfor %}
+	</div>
+
+<p><a href="another">Go to the other page</a></p>
+
+<form method="POST" action="/add">
+<p>Name of new computer scientist: <input type="text" name="name"> <input type="submit" value="Add"></p>
+</form>
+
+</body>
+
+
+</html> -->
