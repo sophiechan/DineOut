@@ -1,11 +1,13 @@
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
 from flask import Flask, request, render_template, g, redirect, Response, Blueprint
+from flask_login import login_user, login_required
 
 restaurant_bp = Blueprint('restaurants', __name__)
 
 @restaurant_bp.route('/')
-def index():
+@login_required
+def all_restaurants():
 	cursor = g.conn.execute("SELECT * FROM Restaurants")
 	paras = ["restid", "name", "street_name", "city", "state", "postal_code", "stars"]
 	data = []
@@ -23,6 +25,7 @@ def index():
 	return render_template("restaurants.html", **context)
 
 @restaurant_bp.route('/<int:restid>')
+@login_required
 def single_restaurant(restid):
 
 	# get single restaurant info
@@ -41,7 +44,7 @@ def single_restaurant(restid):
     	did int,
     	restid int,
 	"""
-	query = "SELECT * FROM Write_Review_About WHERE restid='" + str(restid) + "' ORDER BY dt"
+	query = "SELECT * FROM Write_Review_About WHERE restid='" + str(restid) + "' ORDER BY dt DESC"
 	cursor = g.conn.execute(query)
 	paras = ["dt", "comments", "star", "did", "restid"]
 	reviews = []

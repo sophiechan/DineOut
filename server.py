@@ -17,14 +17,17 @@ Read about it online.
 import os
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
-from flask import Flask, request, render_template, g, redirect, Response
-from views.index import index_bp
+from flask import Flask, request, render_template, g, redirect, Response, flash, url_for
 from views.restaurant import restaurant_bp
+from views.user import user_bp
+from flask_login import (LoginManager, UserMixin, login_user, logout_user, current_user, login_required, fresh_login_required)
 
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 app = Flask(__name__, template_folder=tmpl_dir)
-app.register_blueprint(index_bp, url_prefix='/')
+login_manager = LoginManager(app)
+
 app.register_blueprint(restaurant_bp, url_prefix='/restaurants')
+app.register_blueprint(user_bp, url_prefix='/users')
 
 #
 # The following is a dummy URI that does not connect to a valid database. You will need to modify it to connect to your Part 2 database in order to use the data.
@@ -97,8 +100,10 @@ def teardown_request(exception):
 # see for routing: http://flask.pocoo.org/docs/0.10/quickstart/#routing
 # see for decorators: http://simeonfranklin.com/blog/2012/jul/1/python-decorators-in-12-steps/
 #
+
 # @app.route('/')
 # def index():
+
 # 	"""
 # 	request is a special object that Flask provides to access web request information:
 
@@ -183,6 +188,111 @@ def teardown_request(exception):
 # 		abort(401)
 # 		this_is_never_executed()
 
+login_manager.login_view = 'login'
+login_manager.login_message = 'Unauthorized User'
+login_manager.login_message_category = "info"
+
+users = []
+
+class User(UserMixin):
+    auth = True
+    username = ""
+
+    def hasAuth(self):
+        return 'Manager' if self.auth else 'Diner'
+
+def query_user(id):
+    for user in users:
+        if user['id'] == id:
+            return user
+
+@login_manager.user_loader
+def load_user(id):
+	user_info = query_user(id)
+	if user_info is not None:
+		curr_user = User()
+		curr_user.id = user_info['id']
+		curr_user.auth = user_info['auth']
+		curr_user.username = user_info['username']
+		return curr_user
+    # Must return None if username not found
+
+# @login_manager.request_loader
+#     username = request.args.get('token')
+#     user = query_user(username)
+#     if user is not None:
+#         curr_user = User()
+#         curr_user.id = username
+#         return curr_user
+#     # Must return None if username not found
+
+@login_manager.unauthorized_handler
+def unauthorized_handler():
+    return 'Unauthorized'
+
+@app.route('/')
+@login_required
+def index():
+    return render_template('hello.html')
+
+@app.route('/home')
+@fresh_login_required
+def home():
+    return 'Logged in as: %s' % current_user.get_id()
+
+# consider the user name as unique
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+	if request.method == 'POST':
+		username = request.form.get('username')
+		
+		if username:
+			auth = True if request.form['auth'] == "true" else False
+			dbName = "Managers" if auth else "Diners"
+			password = request.form['password']
+
+			query = "SELECT * FROM " + dbName + " WHERE name='" + username +"' AND password='" + password + "'"
+			cursor = g.conn.execute(query)
+			rows = cursor.fetchall()
+			cursor.close()
+			if len(rows):
+				curr_user = User()
+				
+				user_id = "M " if auth else "D "
+				user_id = user_id + str(rows[0][0])
+				curr_user.auth = auth
+				curr_user.id = user_id
+				curr_user.username = username
+				users.append(
+					{"id":user_id, "auth":auth, "username":username}
+				)
+				cursor.close()
+				next = request.args.get('next')
+				login_user(curr_user, remember=True)
+				return redirect(next or url_for('index'))
+				 # can also be accessed using result[0]
+			cursor.close()
+
+        # if user is not None and request.form['password'] == user['password']:
+        #     print request.form['auth']
+        #     curr_user = User()
+        #     curr_user.id = username
+
+        #     login_user(curr_user, remember=True)
+
+        #     next = request.args.get('next')
+        #     return redirect(next or url_for('index'))
+
+		flash('Wrong username or password!')
+	return render_template('login.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return 'Logged out successfully!'
+
+app.secret_key = '1234567'
 
 if __name__ == "__main__":
 	import click
