@@ -306,19 +306,19 @@ def signup():
 		password = request.form['password']
 		if username and password:
 			auth = True if request.form['auth'] == "true" else False
-			try:
-				if auth:
-					cursor = g.conn.execute('''
-						INSERT INTO Managers (name, password) VALUES (%s, %s)
-					''',(username, password))
-				else:
-					cursor = g.conn.execute('''
-						INSERT INTO Diners (name, password) VALUES (%s, %s)
-					''',(username, password))
-				cursor.close()
-				flash('Sign Up Successfully!!!')
-			except:
-				flash('Duplicate Keys!!!')
+			# try:
+			if auth:
+				cursor = g.conn.execute('''
+					INSERT INTO Managers (name, password) VALUES (%s, %s)
+				''',(username, password))
+			else:
+				cursor = g.conn.execute('''
+					INSERT INTO Diners (name, password) VALUES (%s, %s)
+				''',(username, password))
+			cursor.close()
+			flash('Sign Up Successfully!!!')
+			# except:
+			# 	flash('Duplicate Keys!!!')
 		else:
 			flash('Empty Input!!!')
 	# this is the template for login get method
@@ -355,5 +355,5 @@ if __name__ == "__main__":
 
 		HOST, PORT = host, port
 		print "running on %s:%d" % (HOST, PORT)
-		app.run(host=HOST, port=PORT, debug=True, threaded=threaded)
+		app.run(host=HOST, port=PORT, debug=debug, threaded=threaded)
 	run()

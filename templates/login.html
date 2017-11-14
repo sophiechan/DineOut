@@ -2,7 +2,7 @@
 {% block body %}
 {{ super() }}
 <title>Login Sample</title>
-<h1>{{ pagename }}</h1>
+<h2>{{ pagename }}</h2>
 {% with messages = get_flashed_messages() %}
 <div>{{ messages[0] }}</div>
 {% endwith %}
