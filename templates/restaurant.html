@@ -1,6 +1,33 @@
 {% extends "layout.html" %}
 {% block body %}
 {{ super() }}
+
+	<table class="table">
+		<caption>Restaurant Information</caption>
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>StreetName</th>
+				<th>City</th>
+				<th>State</th>
+				<th>PostalCode</th>
+				<th>Stars</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>{{ rest_info.name }}</td>
+				<td>{{ rest_info.street_name }}</td>
+				<td>{{ rest_info.city }}</td>
+				<td>{{ rest_info.state }}</td>
+				<td>{{ rest_info.postal_code }}</td>
+				<td>{{ rest_info.stars }}</td>
+			</tr>
+		</tbody>
+	</table>
+
+<!-- <div>{{rest_info}}</div> -->
+
 	<table class="table">
 		<caption>Dishes</caption>
 		<thead>
@@ -73,8 +100,6 @@
 			{% endfor %}
 		</tbody>
 	</table>
-
-<div>{{rest_info}}</div>
 <script>
 	function deleteDish(dname, restid) {
 		jQuery.ajax({
