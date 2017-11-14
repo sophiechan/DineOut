@@ -15,9 +15,22 @@
 				<tr>
 					<td>{{ ele.restid }}</td>
 					<td><a href="/restaurants/{{ele.restid}}">{{ele.name}}</a></td>
-					<td><button type="button" class="btn btn-outline-danger">DELETE</button></td>
+					<td><button onclick="deleteRestaurant('{{ele.restid}}','{{lname}}')" type="button" class="btn btn-outline-danger">DELETE</button></td>
 				</tr>
 			{% endfor %}
 		</tbody>
 	</table>
+
+	<script>
+		function deleteRestaurant(restid, lname) {
+			jQuery.ajax({
+					url: '/users/' + lname + '/' + restid,
+					type: 'DELETE',
+					success: function(data) {
+							alert(data)
+							window.location = '/users/' + lname
+					}
+			});
+		}
+	</script>
 {% endblock %}

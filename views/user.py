@@ -20,7 +20,7 @@ def personList(lname):
         		paras[i]:result[i] for i in range(0, len(paras))
         	})
         cursor.close()
-        return render_template("perlist.html", data=data)
+        return render_template("perlist.html", data=data, lname=lname)
 
     if request.method == 'DELETE':
         try:
@@ -47,3 +47,17 @@ def addList():
     else:
         flash('Empty input error!!!')
     return redirect('/')
+
+@user_bp.route('/<lname>/<restid>', methods=['DELETE'])
+@login_required
+def listRemoveRestaurant(lname, restid):
+    if request.method == 'DELETE':
+        _, uid = current_user.id.split(" ")
+        try:
+            cursor = g.conn.execute('''
+                DELETE FROM Contain WHERE did=%s AND lname=%s AND restid=%s
+            ''',(uid, lname, restid))
+            cursor.close()
+            return "delete successfully!"
+        except:
+            return "delete not successfully!"
