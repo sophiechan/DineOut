@@ -20,3 +20,16 @@ def addDish():
     else:
         flash('Empty Input Error')
     return redirect('/restaurants/' + restid)
+
+@manager_bp.route('/<restid>/<dname>', methods=['DELETE'])
+@login_required
+def listRemoveRestaurant(restid, dname):
+    if request.method == 'DELETE':
+        try:
+            cursor = g.conn.execute('''
+                DELETE FROM Have_Dishes WHERE dname=%s AND restid=%s
+            ''',(dname, restid))
+            cursor.close()
+            return "delete successfully!"
+        except:
+            return "delete not successfully!"

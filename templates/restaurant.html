@@ -13,7 +13,8 @@
 				<tr>
 					<td>{{ ele }}</td>
 					{% if current_user.auth %}
-					<td><button type="button" class="btn btn-outline-danger">DELETE</button></td>
+					<td><button type="button" onclick="deleteDish('{{ele}}', '{{rest_id}}')"
+						class="btn btn-outline-danger">DELETE</button></td>
 					{% endif %}
 				</tr>
 			{% endfor %}
@@ -55,5 +56,17 @@
 	</table>
 
 <div>{{rest_info}}</div>
+<script>
+	function deleteDish(dname, restid) {
+		jQuery.ajax({
+				url: '/managers/' + restid + '/' + dname,
+				type: 'DELETE',
+				success: function(data) {
+						alert(data)
+						window.location = '/restaurants/' + restid
+				}
+		});
+	}
+</script>
 
 {% endblock %}

@@ -230,7 +230,7 @@ def load_user(id):
 
 @login_manager.unauthorized_handler
 def unauthorized_handler():
-    return 'Unauthorized'
+    return "<a href='/login'>Log In</h>"
 
 @app.route('/')
 def index():
