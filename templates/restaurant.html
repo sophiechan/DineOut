@@ -1,27 +1,43 @@
 {% extends "layout.html" %}
 {% block body %}
 {{ super() }}
-<table class="table">
-    <caption>Restaurants</caption>
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Infomation</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for ele in data %}
-    <tr>
-        <td><a href="/restaurants/{{ele.restid}}">{{ ele.name }}</a></td>
-        <td>{{ ele }}</td>
-    </tr>
-    {% endfor %}
-    </tbody>
-    <h>retaurant</h>
-    <div>{{rest_info}}</div>
-    <h>reviews</h>
-    <div>{{reviews}}</div>
-    <h>dishes</h>
-    <div>{{dishes}}</div>
-</table>
+    <table class="table">
+        <caption>Dishes</caption>
+        <thead>
+            <tr>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ele in dishes %}
+                <tr>
+                    <td>{{ ele }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <table class="table">
+        <caption>Reviews</caption>
+        <thead>
+            <tr>
+                <th>ReviewTime</th>
+                <th>DinerId</th>
+                <th>Comments</th>
+                <th>Star</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ele in reviews %}
+                <tr>
+                    <td>{{ ele.dt }}</td>
+                    <td>{{ ele.did }}</td>
+                    <td>{{ ele.comments }}</td>
+                    <td>{{ ele.star }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+<div>{{rest_info}}</div>
+
 {% endblock %}
