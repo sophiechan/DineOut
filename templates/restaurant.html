@@ -27,6 +27,7 @@
 		{% endwith %}
 		<form action="/managers/addDish" method="POST">
 				<input type="text" name="dname" id="dname" placeholder="new dish name"></input>
+				<input hidden type="text" name="restid" id="restid" value="{{rest_id}}"></input>
 				<input type="submit" name="add"></input>
 		</form>
 	{% endif %}
