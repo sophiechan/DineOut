@@ -32,7 +32,6 @@ def personList(lname):
         except:
             return "delete not successfully!"
 
-
 @user_bp.route('/addList', methods=['POST'])
 @login_required
 def addList():
@@ -61,3 +60,30 @@ def listRemoveRestaurant(lname, restid):
             return "delete successfully!"
         except:
             return "delete not successfully!"
+
+@user_bp.route('/addReview', methods=['POST'])
+@login_required
+def addReview():
+    if request.method == 'POST' and request.form['comment'] and request.form['star']:
+        _, uid = current_user.id.split(" ")
+        comments = request.form['comment']
+        star = request.form['star']
+        restid = request.form['restid']
+        from datetime import date
+        today = date.today()
+        try:
+            cursor = g.conn.execute('''
+                INSERT INTO Write_Review_About (dt, comments, star, did, restid) VALUES (%s, %s, %s, %s, %s)
+            ''',(today.isoformat(), comments, star, uid, restid))
+            cursor.close()
+
+            # recalculate the star of this restaurant
+            cursor = g.conn.execute('''
+                UPDATE Restaurants SET stars=(SELECT AVG(star) FROM Write_Review_About WHERE restid=%s) WHERE restid=%s
+            ''',(restid, restid))
+            cursor.close()
+        except:
+            flash('Duplicate keys!!!')
+    else:
+        flash('Empty input error!!!')
+    return redirect('/restaurants/' + restid)

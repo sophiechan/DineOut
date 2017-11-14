@@ -11,10 +11,10 @@ def all_restaurants():
 	if current_user.auth:
 		_, mid = current_user.id.split(" ")
 		cursor = g.conn.execute('''
-			SELECT R.* FROM Restaurants AS R, Manage AS M WHERE R.restid=M.restid AND M.mid=%s
+			SELECT R.* FROM Restaurants AS R, Manage AS M WHERE R.restid=M.restid AND M.mid=%s ORDER BY R.restid
 		''',(mid))
 	else:
-		cursor = g.conn.execute("SELECT * FROM Restaurants")
+		cursor = g.conn.execute("SELECT * FROM Restaurants ORDER BY restid")
 	paras = ["restid", "name", "street_name", "city", "state", "postal_code", "stars"]
 	data = []
 	for result in cursor:
@@ -33,7 +33,6 @@ def all_restaurants():
 @restaurant_bp.route('/<int:restid>')
 @login_required
 def single_restaurant(restid):
-
 	# get single restaurant info
 	query = "SELECT * FROM Restaurants WHERE restid='" + str(restid) + "'"
 	cursor = g.conn.execute(query)
