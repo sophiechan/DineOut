@@ -230,7 +230,7 @@ def load_user(id):
 
 @login_manager.unauthorized_handler
 def unauthorized_handler():
-    return "<a href='/login'>Log In</h>"
+    return redirect('/login')
 
 @app.route('/')
 def index():
@@ -245,7 +245,7 @@ def index():
 		else:
 			return render_template('hello.html')
 	else:
-		return "<a href='/login'>Log In</h>"
+		return redirect('/login')
 
 @app.route('/home')
 @fresh_login_required
@@ -296,13 +296,39 @@ def login():
         #     return redirect(next or url_for('index'))
 
 		flash('Wrong username or password!')
-	return render_template('login.html')
+	# this is the template for login get method
+	return render_template('login.html', pagename="login")
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+	if request.method == 'POST':
+		username = request.form.get('username')
+		password = request.form['password']
+		if username and password:
+			auth = True if request.form['auth'] == "true" else False
+			try:
+				if auth:
+					cursor = g.conn.execute('''
+						INSERT INTO Managers (name, password) VALUES (%s, %s)
+					''',(username, password))
+				else:
+					cursor = g.conn.execute('''
+						INSERT INTO Diners (name, password) VALUES (%s, %s)
+					''',(username, password))
+				cursor.close()
+				flash('Sign Up Successfully!!!')
+			except:
+				flash('Duplicate Keys!!!')
+		else:
+			flash('Empty Input!!!')
+	# this is the template for login get method
+	return render_template('login.html', pagename="signup")
 
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
-    return 'Logged out successfully!'
+    return redirect('/')
 
 app.secret_key = '1234567'
 
@@ -329,5 +355,5 @@ if __name__ == "__main__":
 
 		HOST, PORT = host, port
 		print "running on %s:%d" % (HOST, PORT)
-		app.run(host=HOST, port=PORT, debug=debug, threaded=threaded)
+		app.run(host=HOST, port=PORT, debug=True, threaded=threaded)
 	run()
