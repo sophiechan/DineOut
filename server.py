@@ -231,18 +231,19 @@ def unauthorized_handler():
     return 'Unauthorized'
 
 @app.route('/')
-@login_required
 def index():
-	_, uid = current_user.id.split(" ")
-	print uid
-	if not current_user.auth:
-		query = "SELECT lname FROM PersonalLists_Save WHERE did='" + uid + "'"
-		cursor = g.conn.execute(query)
-		lists = [ele[0] for ele in cursor]
-		cursor.close()
-		return render_template('hello.html', lists=lists)
+	if current_user.is_authenticated:
+		_, uid = current_user.id.split(" ")
+		if not current_user.auth:
+			query = "SELECT lname FROM PersonalLists_Save WHERE did='" + uid + "'"
+			cursor = g.conn.execute(query)
+			lists = [ele[0] for ele in cursor]
+			cursor.close()
+			return render_template('hello.html', lists=lists)
+		else:
+			return render_template('hello.html')
 	else:
-		return render_template('hello.html')
+		return "<a href='/login'>Log In</h>"
 
 @app.route('/home')
 @fresh_login_required
