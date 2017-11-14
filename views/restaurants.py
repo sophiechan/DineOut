@@ -68,7 +68,7 @@ def single_restaurant(restid):
 	    dishes.append(result[0])
 	cursor.close()
 
-	context = dict(rest_info = rest_info, dishes = dishes, reviews = reviews)
+	context = dict(rest_info = rest_info, dishes = dishes, reviews = reviews, rest_id = restid)
 
 	# render_template looks in the templates/ folder for files.
 	# for example, the below file reads template/index.html
