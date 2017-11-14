@@ -33,3 +33,25 @@ def listRemoveRestaurant(restid, dname):
             return "delete successfully!"
         except:
             return "delete not successfully!"
+
+@manager_bp.route('/updateRest', methods = ['POST'])
+@login_required
+def updateRest():
+    restid = request.form['restid']
+    name = request.form['name']
+    street_name = request.form['street_name']
+    city = request.form['city']
+    state = request.form['state']
+    postal_code = request.form['postal_code']
+    try:
+        cursor = g.conn.execute('''
+                UPDATE Restaurants SET name=%s,
+                street_name=%s, city=%s, state=%s, postal_code=%s WHERE restid=%s
+        ''',(name, street_name, city, state, postal_code, restid))
+        cursor.close()
+        flash('Update successfully!')
+        return redirect('/restaurants/' + restid)
+    except:
+        flash('Update not successfully!')
+        return redirect('/restaurants/' + restid)
+

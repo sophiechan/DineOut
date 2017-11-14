@@ -12,16 +12,35 @@
 				<th>State</th>
 				<th>PostalCode</th>
 				<th>Stars</th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
+			{% if current_user.auth %}
+			{% with messages = get_flashed_messages() %}
+					<div>{{ messages[0] }}</div>
+				{% endwith %}
+				<form action="/managers/updateRest" method="POST">
+						<td><input type="text" name="name" id="name" value="{{rest_info.name}}"></input></td>
+						<td><input type="text" name="street_name" id="street_name" value="{{rest_info.street_name}}"></input></td>
+						<td><input type="text" name="city" id="city" value="{{rest_info.city}}"></input></td>
+						<td><input type="text" name="state" id="state" value="{{rest_info.state}}"></input></td>
+						<td><input type="text" name="postal_code" id="postal_code" value="{{rest_info.postal_code}}"></input></td>
+						<td>{{ rest_info.stars }}</td>
+						<input hidden type="text" name="restid" id="restid" value="{{rest_id}}"></input>
+						<td><input type="submit" name="update"></input></td>
+				</form>
+			{% endif %}
+			{% if not current_user.auth %}
 				<td>{{ rest_info.name }}</td>
 				<td>{{ rest_info.street_name }}</td>
 				<td>{{ rest_info.city }}</td>
 				<td>{{ rest_info.state }}</td>
 				<td>{{ rest_info.postal_code }}</td>
 				<td>{{ rest_info.stars }}</td>
+				<td></td>
+			{% endif %}
 			</tr>
 		</tbody>
 	</table>
