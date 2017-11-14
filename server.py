@@ -20,6 +20,7 @@ from sqlalchemy.pool import NullPool
 from flask import Flask, request, render_template, g, redirect, Response, flash, url_for
 from views.restaurant import restaurant_bp
 from views.user import user_bp
+from views.managers import manager_bp
 from flask_login import (LoginManager, UserMixin, login_user, logout_user, current_user, login_required, fresh_login_required)
 
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
@@ -28,6 +29,7 @@ login_manager = LoginManager(app)
 
 app.register_blueprint(restaurant_bp, url_prefix='/restaurants')
 app.register_blueprint(user_bp, url_prefix='/users')
+app.register_blueprint(manager_bp, url_prefix='/managers')
 
 #
 # The following is a dummy URI that does not connect to a valid database. You will need to modify it to connect to your Part 2 database in order to use the data.

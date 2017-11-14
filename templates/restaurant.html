@@ -1,42 +1,57 @@
 {% extends "layout.html" %}
 {% block body %}
 {{ super() }}
-    <table class="table">
-        <caption>Dishes</caption>
-        <thead>
-            <tr>
-                <th>Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for ele in dishes %}
-                <tr>
-                    <td>{{ ele }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <table class="table">
-        <caption>Reviews</caption>
-        <thead>
-            <tr>
-                <th>ReviewTime</th>
-                <th>DinerId</th>
-                <th>Comments</th>
-                <th>Star</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for ele in reviews %}
-                <tr>
-                    <td>{{ ele.dt }}</td>
-                    <td>{{ ele.did }}</td>
-                    <td>{{ ele.comments }}</td>
-                    <td>{{ ele.star }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+	<table class="table">
+		<caption>Dishes</caption>
+		<thead>
+			<tr>
+				<th>Name</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for ele in dishes %}
+				<tr>
+					<td>{{ ele }}</td>
+					{% if current_user.auth %}
+					<td><button type="button" class="btn btn-outline-danger">DELETE</button></td>
+					{% endif %}
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	{% if current_user.auth %}
+		<h3> You can add a new Dish</h3>
+		{% with messages = get_flashed_messages() %}
+			<div>{{ messages[0] }}</div>
+		{% endwith %}
+		<form action="/managers/addDish" method="POST">
+				<input type="text" name="dname" id="dname" placeholder="new dish name"></input>
+				<input type="submit" name="add"></input>
+		</form>
+	{% endif %}
+
+	<table class="table">
+		<caption>Reviews</caption>
+		<thead>
+			<tr>
+				<th>ReviewTime</th>
+				<th>DinerId</th>
+				<th>Comments</th>
+				<th>Star</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for ele in reviews %}
+				<tr>
+					<td>{{ ele.dt }}</td>
+					<td>{{ ele.did }}</td>
+					<td>{{ ele.comments }}</td>
+					<td>{{ ele.star }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 
 <div>{{rest_info}}</div>
 
