@@ -18,7 +18,7 @@ import os
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
 from flask import Flask, request, render_template, g, redirect, Response, flash, url_for
-from views.restaurant import restaurant_bp
+from views.restaurants import restaurant_bp
 from views.user import user_bp
 from views.managers import manager_bp
 from flask_login import (LoginManager, UserMixin, login_user, logout_user, current_user, login_required, fresh_login_required)
