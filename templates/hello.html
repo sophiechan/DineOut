@@ -19,7 +19,7 @@
 					{% for ele in lists %}
 						<tr>
 							<td><a href="/users/{{ele}}">{{ ele }}</a></td>
-							<td><button type="button" class="btn btn-outline-danger">DELETE</button></td>
+							<td><button onclick="deleteList('{{ele}}')" type="button" class="btn btn-outline-danger">DELETE</button></td>
 						</tr>
 					{% endfor %}
 				</tbody>
@@ -33,4 +33,16 @@
 					<input type="submit" name="add"></input>
 			</form>
 		{% endif %}
+		<script>
+			function deleteList(lname) {
+				jQuery.ajax({
+						url: '/users/' + lname,
+						type: 'DELETE',
+						success: function(data) {
+								alert(data)
+								window.location = '/'
+						}
+				});
+			}
+		</script>
 {% endblock %}
