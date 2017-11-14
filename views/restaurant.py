@@ -1,14 +1,20 @@
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
 from flask import Flask, request, render_template, g, redirect, Response, Blueprint
-from flask_login import login_user, login_required
+from flask_login import login_user, login_required, current_user
 
 restaurant_bp = Blueprint('restaurants', __name__)
 
 @restaurant_bp.route('/')
 @login_required
 def all_restaurants():
-	cursor = g.conn.execute("SELECT * FROM Restaurants")
+	if current_user.auth:
+		_, mid = current_user.id.split(" ")
+		cursor = g.conn.execute('''
+			SELECT R.* FROM Restaurants AS R, Manage AS M WHERE R.restid=M.restid AND M.mid=%s
+		''',(mid))
+	else:
+		cursor = g.conn.execute("SELECT * FROM Restaurants")
 	paras = ["restid", "name", "street_name", "city", "state", "postal_code", "stars"]
 	data = []
 	for result in cursor:
@@ -16,7 +22,7 @@ def all_restaurants():
 			paras[i]:result[i] for i in range(0, len(paras))
 		})  # can also be accessed using result[0]
 	cursor.close()
-	
+
 	context = dict(data = data)
 
 	# render_template looks in the templates/ folder for files.

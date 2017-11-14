@@ -7,8 +7,8 @@ user_bp = Blueprint('users', __name__)
 
 @user_bp.route('/<lname>', methods=['GET', 'POST', 'DELETE'])
 def personList(lname):
+    _, uid = current_user.id.split(" ")
     if request.method == 'GET':
-        _, uid = current_user.id.split(" ")
         # query = "SELECT R.* FROM Restaurants AS R, Contain AS C WHERE C.did='" + uid + "', C.lname='" + lname + "' AND R.restid=C.restid"
         cursor = g.conn.execute('''
             SELECT R.* FROM Restaurants AS R, Contain AS C WHERE C.did=%s AND C.lname=%s AND R.restid=C.restid
@@ -23,7 +23,14 @@ def personList(lname):
         return render_template("perlist.html", data=data)
 
     if request.method == 'DELETE':
-        pass
+        try:
+            cursor = g.conn.execute('''
+                DELETE FROM PersonalLists_Save WHERE did=%s AND lname=%s
+            ''',(uid, lname))
+            cursor.close()
+            return "delete successfully!"
+        except:
+            return "delete not successfully!"
 
 
 @user_bp.route('/addList', methods=['POST'])
