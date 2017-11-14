@@ -7,13 +7,15 @@
 			<tr>
 				<th>Id</th>
 				<th>Name</th>
+				<th>Operation</th>
 			</tr>
 		</thead>
 		<tbody>
 			{% for ele in data %}
 				<tr>
 					<td>{{ ele.restid }}</td>
-					<td><a href="/perlists/{{ele.lid}}">{{ele.name}}</a></td>
+					<td><a href="/restaurants/{{ele.restid}}">{{ele.name}}</a></td>
+					<td><button type="button" class="btn btn-outline-danger">DELETE</button></td>
 				</tr>
 			{% endfor %}
 		</tbody>

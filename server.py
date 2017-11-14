@@ -32,7 +32,7 @@ app.register_blueprint(user_bp, url_prefix='/users')
 #
 # The following is a dummy URI that does not connect to a valid database. You will need to modify it to connect to your Part 2 database in order to use the data.
 #
-# XXX: The URI should be in the format of: 
+# XXX: The URI should be in the format of:
 #
 #     postgresql://USER:PASSWORD@104.196.18.7/w4111
 #
@@ -62,7 +62,7 @@ engine.execute("""INSERT INTO test(name) VALUES ('grace hopper'), ('alan turing'
 @app.before_request
 def before_request():
 	"""
-	This function is run at the beginning of every web request 
+	This function is run at the beginning of every web request
 	(every time you enter an address in the web browser).
 	We use it to setup a database connection that can be used throughout the request.
 
@@ -96,7 +96,7 @@ def teardown_request(exception):
 #       @app.route("/foobar/", methods=["POST", "GET"])
 #
 # PROTIP: (the trailing / in the path is important)
-# 
+#
 # see for routing: http://flask.pocoo.org/docs/0.10/quickstart/#routing
 # see for decorators: http://simeonfranklin.com/blog/2012/jul/1/python-decorators-in-12-steps/
 #
@@ -136,14 +136,14 @@ def teardown_request(exception):
 # 	# You can see an example template in templates/index.html
 # 	#
 # 	# context are the variables that are passed to the template.
-# 	# for example, "data" key in the context variable defined below will be 
+# 	# for example, "data" key in the context variable defined below will be
 # 	# accessible as a variable in index.html:
 # 	#
 # 	#     # will print: [u'grace hopper', u'alan turing', u'ada lovelace']
 # 	#     <div>{{data}}</div>
-# 	#     
+# 	#
 # 	#     # creates a <div> tag for each element in data
-# 	#     # will print: 
+# 	#     # will print:
 # 	#     #
 # 	#     #   <div>grace hopper</div>
 # 	#     #   <div>alan turing</div>
@@ -164,7 +164,7 @@ def teardown_request(exception):
 
 #
 # This is an example of a different path.  You can see it at:
-# 
+#
 #     localhost:8111/another
 #
 # Notice that the function name is another() rather than index()
@@ -233,7 +233,16 @@ def unauthorized_handler():
 @app.route('/')
 @login_required
 def index():
-    return render_template('hello.html')
+	_, uid = current_user.id.split(" ")
+	print uid
+	if not current_user.auth:
+		query = "SELECT lname FROM PersonalLists_Save WHERE did='" + uid + "'"
+		cursor = g.conn.execute(query)
+		lists = [ele[0] for ele in cursor]
+		cursor.close()
+		return render_template('hello.html', lists=lists)
+	else:
+		return render_template('hello.html')
 
 @app.route('/home')
 @fresh_login_required
@@ -245,7 +254,7 @@ def home():
 def login():
 	if request.method == 'POST':
 		username = request.form.get('username')
-		
+
 		if username:
 			auth = True if request.form['auth'] == "true" else False
 			dbName = "Managers" if auth else "Diners"
@@ -257,7 +266,7 @@ def login():
 			cursor.close()
 			if len(rows):
 				curr_user = User()
-				
+
 				user_id = "M " if auth else "D "
 				user_id = user_id + str(rows[0][0])
 				curr_user.auth = auth

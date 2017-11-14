@@ -1,6 +1,36 @@
-<!doctype html>
-<title>Login Sample</title>
-{% if current_user.is_authenticated %}
-<h1>Hello {{ current_user.username }}!</h1>
-<h2>You are a {{ current_user.hasAuth()}}</h2>
-{% endif %}
+{% extends "layout.html" %}
+{% block body %}
+    {{ super() }}
+    <title>Login Sample</title>
+    {% if current_user.is_authenticated %}
+      <h1>Hello {{ current_user.username }}!</h1>
+      <h2>You are a {{ current_user.hasAuth()}}</h2>
+    {% endif %}
+
+    {% if not current_user.auth %}
+      <table class="table">
+        <caption>Personal Lists</caption>
+        <thead>
+          <tr>
+            <th>Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for ele in lists %}
+            <tr>
+              <td><a href="/users/{{ele}}">{{ ele }}</a></td>
+              <td><button type="button" class="btn btn-outline-danger">DELETE</button></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <h3> You can add a new List</h3>
+      {% with messages = get_flashed_messages() %}
+        <div>{{ messages[0] }}</div>
+      {% endwith %}
+      <form action="/users/addList" method="POST">
+          <input type="text" name="lname" id="lname" placeholder="new list name"></input>
+          <input type="submit" name="add"></input>
+      </form>
+    {% endif %}
+{% endblock %}
