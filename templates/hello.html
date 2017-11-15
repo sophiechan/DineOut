@@ -32,11 +32,45 @@
 					<input type="text" name="lname" id="lname" maxlength="25" placeholder="new list name"></input>
 					<input type="submit" name="add"></input>
 			</form>
+
+		<table class="table">
+			<caption>Reviews</caption>
+			<thead>
+				<tr>
+					<th>ReviewTime</th>
+					<th>RestaurantId</th>
+					<th>Comments</th>
+					<th>Star</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for ele in reviews %}
+					<tr>
+						<td>{{ ele.dt }}</td>
+						<td>{{ ele.restid }}</td>
+						<td>{{ ele.comments }}</td>
+						<td>{{ ele.star }}</td>
+						<td><button onclick="deleteReview('{{ele.dt}}', '{{ele.restid}}', '{{ele.comments}}')" type="button" class="btn btn-outline-danger">DELETE</button></td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
 		{% endif %}
 		<script>
 			function deleteList(lname) {
 				jQuery.ajax({
 						url: '/users/' + lname,
+						type: 'DELETE',
+						success: function(data) {
+								alert(data)
+								window.location = '/'
+						}
+				});
+			}
+			function deleteReview(dt, restid, comments) {
+				jQuery.ajax({
+						url: '/users/' + dt + '/' + restid + '/' + comments,
 						type: 'DELETE',
 						success: function(data) {
 								alert(data)

@@ -241,7 +241,17 @@ def index():
 			cursor = g.conn.execute(query)
 			lists = [ele[0] for ele in cursor]
 			cursor.close()
-			return render_template('hello.html', lists=lists)
+
+			query = "SELECT * FROM Write_Review_About WHERE did='" + uid + "' ORDER BY dt DESC"
+			cursor = g.conn.execute(query)
+			paras = ["dt", "comments", "star", "did", "restid"]
+			reviews = []
+			for result in cursor:
+			    reviews.append({
+			        paras[i]:result[i] for i in range(0, len(paras))
+			    })
+			cursor.close()
+			return render_template('hello.html', lists = lists, reviews = reviews)
 		else:
 			return render_template('hello.html')
 	else:
