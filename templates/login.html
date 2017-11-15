@@ -2,7 +2,11 @@
 {% block body %}
 {{ super() }}
 <title>Login Sample</title>
-<h2>{{ pagename }}</h2>
+{% if pagename == "login" %}
+	<h2>{{ pagename }}</h2>
+{% else %}
+	<h2>Diner Sign Up</h2>
+{% endif %}
 {% with messages = get_flashed_messages() %}
 <div>{{ messages[0] }}</div>
 {% endwith %}
@@ -11,9 +15,10 @@
     <input type="password" name="password" id="password" placeholder="Password"></input>
     <input type="submit" name="submit"></input>
 </form>
-
-<select name="auth" id="auth" form="carform">
-    <option value="true">Manager</option>
-    <option value="false">Diner</option>
-</select>
+{% if pagename == "login" %}
+	<select name="auth" id="auth" form="carform">
+	    <option value="true">Manager</option>
+	    <option value="false">Diner</option>
+	</select>
+{% endif %}
 {% endblock %}

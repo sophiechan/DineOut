@@ -305,20 +305,14 @@ def signup():
 		username = request.form.get('username')
 		password = request.form['password']
 		if username and password:
-			auth = True if request.form['auth'] == "true" else False
-			# try:
-			if auth:
-				cursor = g.conn.execute('''
-					INSERT INTO Managers (name, password) VALUES (%s, %s)
-				''',(username, password))
-			else:
+			try:
 				cursor = g.conn.execute('''
 					INSERT INTO Diners (name, password) VALUES (%s, %s)
 				''',(username, password))
-			cursor.close()
-			flash('Sign Up Successfully!!!')
-			# except:
-			# 	flash('Duplicate Keys!!!')
+				cursor.close()
+				flash('Sign Up Successfully!!!')
+			except:
+				flash('Duplicate User')
 		else:
 			flash('Empty Input!!!')
 	# this is the template for login get method

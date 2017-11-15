@@ -6,7 +6,7 @@
 		<caption>Restaurant Information</caption>
 		<thead>
 			<tr>
-				<th>Name</th>
+				<th>Restaurant Name</th>
 				<th>StreetName</th>
 				<th>City</th>
 				<th>State</th>
@@ -22,11 +22,11 @@
 					<div>{{ messages[0] }}</div>
 				{% endwith %}
 				<form action="/managers/updateRest" method="POST">
-						<td><input type="text" name="name" id="name" value="{{rest_info.name}}"></input></td>
-						<td><input type="text" name="street_name" id="street_name" value="{{rest_info.street_name}}"></input></td>
-						<td><input type="text" name="city" id="city" value="{{rest_info.city}}"></input></td>
-						<td><input type="text" name="state" id="state" value="{{rest_info.state}}"></input></td>
-						<td><input type="text" name="postal_code" id="postal_code" value="{{rest_info.postal_code}}"></input></td>
+						<td><input type="text" name="name" id="name" maxlength="25" value="{{rest_info.name}}"></input></td>
+						<td><input type="text" name="street_name" id="street_name" maxlength="100" value="{{rest_info.street_name}}"></input></td>
+						<td><input type="text" name="city" id="city" maxlength="20" value="{{rest_info.city}}"></input></td>
+						<td><input type="text" name="state" id="state" maxlength="2" value="{{rest_info.state}}"></input></td>
+						<td><input type="text" name="postal_code" id="postal_code" maxlength="5" value="{{rest_info.postal_code}}"></input></td>
 						<td>{{ rest_info.stars }}</td>
 						<input hidden type="text" name="restid" id="restid" value="{{rest_id}}"></input>
 						<td><input type="submit" name="update"></input></td>
@@ -51,7 +51,7 @@
 		<caption>Dishes</caption>
 		<thead>
 			<tr>
-				<th>Name</th>
+				<th>Dish Name</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -73,7 +73,7 @@
 			<div>{{ messages[0] }}</div>
 		{% endwith %}
 		<form action="/managers/addDish" method="POST">
-				<input type="text" name="dname" id="dname" placeholder="new dish name"></input>
+				<input type="text" name="dname" id="dname" maxlength="25" placeholder="new dish name"></input>
 				<input hidden type="text" name="restid" id="restid" value="{{rest_id}}"></input>
 				<input type="submit" name="add"></input>
 		</form>
@@ -85,10 +85,11 @@
 			<div>{{ messages[0] }}</div>
 		{% endwith %}
 		<form action="/users/addReview" id="reviewform" method="POST">
-				<input type="text" name="comment" id="comment" placeholder="add a new review"></input>
+				<input type="text" name="comment" id="comment" maxlength="1000" placeholder="add a new review"></input>
 				<input hidden type="text" name="restid" id="restid" value="{{rest_id}}"></input>
 				<input type="submit" name="add"></input>
 		</form>
+		<p>Select Star</p>
 		<select name="star" id="star" form="reviewform">
 		    <option value="1">1</option>
 		    <option value="2">2</option>
