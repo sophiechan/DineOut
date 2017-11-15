@@ -67,7 +67,23 @@ def single_restaurant(restid):
 	    dishes.append(result[0])
 	cursor.close()
 
-	context = dict(rest_info = rest_info, dishes = dishes, reviews = reviews, rest_id = restid)
+	print current_user.auth
+	if current_user.auth:
+		context = dict(rest_info = rest_info, dishes = dishes, reviews = reviews, rest_id = restid)
+	else:
+		_, uid = current_user.id.split(" ")
+		cursor = g.conn.execute('''
+			SELECT P.lname FROM PersonalLists_Save AS P
+			WHERE
+				P.did = %s
+				AND P.lname NOT IN (SELECT lname FROM Contain WHERE did=%s AND restid=%s)
+		''',(uid, uid, restid))
+		lists = []
+		for result in cursor:
+		    lists.append(result[0])
+		print lists
+		cursor.close()
+		context = dict(rest_info = rest_info, dishes = dishes, reviews = reviews, lists = lists, rest_id = restid)
 
 	# render_template looks in the templates/ folder for files.
 	# for example, the below file reads template/index.html

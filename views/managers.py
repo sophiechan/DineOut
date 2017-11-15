@@ -54,4 +54,3 @@ def updateRest():
     except:
         flash('Update not successfully!')
         return redirect('/restaurants/' + restid)
-
