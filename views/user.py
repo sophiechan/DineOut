@@ -35,9 +35,10 @@ def personList(lname):
 @user_bp.route('/addList', methods=['POST'])
 @login_required
 def addList():
-    if request.method == 'POST' and request.form['lname']:
+    lname = request.form['lname'].strip()
+    if request.method == 'POST' and lname:
         _, uid = current_user.id.split(" ")
-        query = "INSERT INTO PersonalLists_Save (did, lname) VALUES ('"+ uid + "', '" + request.form['lname'] + "')"
+        query = "INSERT INTO PersonalLists_Save (did, lname) VALUES ('"+ uid + "', '" + lname + "')"
         try:
             cursor = g.conn.execute(query)
             cursor.close()
