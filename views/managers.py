@@ -9,9 +9,10 @@ manager_bp = Blueprint('managers', __name__)
 @login_required
 def addDish():
     restid = request.form['restid']
-    if request.method == 'POST' and request.form['dname']:
+    dname = request.form['dname'].strip()
+    if request.method == 'POST' and dname:
         # _, mid = current_user.id.split(" ")
-        query = "INSERT INTO Have_Dishes (restid, dname) VALUES ('"+ restid + "', '" + request.form['dname'] + "')"
+        query = "INSERT INTO Have_Dishes (restid, dname) VALUES ('"+ restid + "', '" + dname + "')"
         try:
             cursor = g.conn.execute(query)
             cursor.close()
