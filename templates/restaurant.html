@@ -103,8 +103,8 @@
 		<caption>Reviews</caption>
 		<thead>
 			<tr>
-				<th>ReviewTime</th>
-				<th>DinerId</th>
+				<th>Review_Time</th>
+				<th>Diner_Name</th>
 				<th>Comments</th>
 				<th>Star</th>
 			</tr>
@@ -113,7 +113,7 @@
 			{% for ele in reviews %}
 				<tr>
 					<td>{{ ele.dt }}</td>
-					<td>{{ ele.did }}</td>
+					<td>{{ ele.name }}</td>
 					<td>{{ ele.comments }}</td>
 					<td>{{ ele.star }}</td>
 				</tr>

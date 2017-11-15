@@ -49,9 +49,13 @@ def single_restaurant(restid):
     	did int,
     	restid int,
 	"""
-	query = "SELECT * FROM Write_Review_About WHERE restid='" + str(restid) + "' ORDER BY dt DESC"
-	cursor = g.conn.execute(query)
-	paras = ["dt", "comments", "star", "did", "restid"]
+	cursor = g.conn.execute('''
+		SELECT w.dt, w.comments, w.star, w.did, w.restid, d.name
+		FROM Write_Review_About AS w INNER JOIN Diners AS d ON w.did = d.did
+		WHERE w.restid = %s
+		ORDER BY dt DESC
+		''', (restid))
+	paras = ["dt", "comments", "star", "did", "restid", "name"]
 	reviews = []
 	for result in cursor:
 	    reviews.append({

@@ -243,8 +243,13 @@ def index():
 			cursor.close()
 
 			query = "SELECT * FROM Write_Review_About WHERE did='" + uid + "' ORDER BY dt DESC"
-			cursor = g.conn.execute(query)
-			paras = ["dt", "comments", "star", "did", "restid"]
+			cursor = g.conn.execute('''
+				SELECT w.dt, w.comments, w.star, w.did, w.restid, r.name
+				FROM Write_Review_About AS w INNER JOIN Restaurants AS r ON w.restid = r.restid
+				WHERE did = %s
+				ORDER BY dt DESC
+				''',(uid))
+			paras = ["dt", "comments", "star", "did", "restid", "name"]
 			reviews = []
 			for result in cursor:
 			    reviews.append({
