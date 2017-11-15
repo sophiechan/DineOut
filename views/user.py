@@ -87,3 +87,18 @@ def addReview():
     else:
         flash('Empty input error!!!')
     return redirect('/restaurants/' + restid)
+
+@user_bp.route('/<dt>/<restid>/<comments>', methods=['DELETE'])
+@login_required
+def removeReview(dt, restid, comments):
+    if request.method == 'DELETE':
+        _, uid = current_user.id.split(" ")
+        try:
+            cursor = g.conn.execute('''
+                DELETE FROM Write_Review_About WHERE dt=%s AND restid=%s AND did=%s AND comments=%s
+            ''',(dt, restid, uid, comments))
+            cursor.close()
+            return "delete successfully!"
+        except:
+            return "delete not successfully!"
+
