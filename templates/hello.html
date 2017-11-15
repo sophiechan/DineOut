@@ -25,11 +25,12 @@
 				</tbody>
 			</table>
 			<h3> You can add a new List</h3>
+			<p>The list name CANNOT contain the following characters: ' or "</p>
 			{% with messages = get_flashed_messages() %}
 				<div>{{ messages[0] }}</div>
 			{% endwith %}
 			<form action="/users/addList" method="POST">
-					<input type="text" name="lname" id="lname" maxlength="25" placeholder="new list name"></input>
+					<input type="text" name="lname" id="lname" maxlength="25" pattern="[^'\x22]+" placeholder="new list name"></input>
 					<input type="submit" name="add"></input>
 			</form>
 
