@@ -106,15 +106,20 @@ def addToList():
             pass
     return redirect('/restaurants/' + restid)
 
-@user_bp.route('/<dt>/<restid>/<comments>', methods=['DELETE'])
+@user_bp.route('/deleteReview/<dt>/<restid>', methods=['DELETE'])
 @login_required
-def removeReview(dt, restid, comments):
+def removeReview(dt, restid):
     if request.method == 'DELETE':
         _, uid = current_user.id.split(" ")
         try:
             cursor = g.conn.execute('''
-                DELETE FROM Write_Review_About WHERE dt=%s AND restid=%s AND did=%s AND comments=%s
-            ''',(dt, restid, uid, comments))
+                DELETE FROM Write_Review_About WHERE dt=%s AND restid=%s AND did=%s
+            ''',(dt, restid, uid))
+            cursor.close()
+
+            cursor = g.conn.execute('''
+                UPDATE Restaurants SET stars=(SELECT AVG(star) FROM Write_Review_About WHERE restid=%s) WHERE restid=%s
+            ''',(restid, restid))
             cursor.close()
             return "delete successfully!"
         except:

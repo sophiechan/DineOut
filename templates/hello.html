@@ -51,7 +51,7 @@
 						<td>{{ ele.restid }}</td>
 						<td>{{ ele.comments }}</td>
 						<td>{{ ele.star }}</td>
-						<td><button onclick="deleteReview('{{ele.dt}}', '{{ele.restid}}', '{{ele.comments}}')" type="button" class="btn btn-outline-danger">DELETE</button></td>
+						<td><button onclick="deleteReview('{{ele.dt}}', '{{ele.restid}}')" type="button" class="btn btn-outline-danger">DELETE</button></td>
 					</tr>
 				{% endfor %}
 			</tbody>
@@ -70,7 +70,7 @@
 			}
 			function deleteReview(dt, restid, comments) {
 				jQuery.ajax({
-						url: '/users/' + dt + '/' + restid + '/' + comments,
+						url: '/users/deleteReview/' + dt + '/' + restid,
 						type: 'DELETE',
 						success: function(data) {
 								alert(data)
