@@ -88,17 +88,39 @@ def addReview():
         flash('Empty input error!!!')
     return redirect('/restaurants/' + restid)
 
-@user_bp.route('/<dt>/<restid>/<comments>', methods=['DELETE'])
+@user_bp.route('/addToList', methods=['POST'])
 @login_required
-def removeReview(dt, restid, comments):
+def addToList():
+    lname = request.form['lname']
+    restid = request.form['restid']
+    userid = request.form['userid']
+    print lname, restid, userid
+    if request.method == 'POST' and lname and restid and userid:
+        _, uid = userid.split(" ")
+        try:
+            cursor = g.conn.execute('''
+                INSERT INTO Contain (did, lname, restid) VALUES (%s, %s, %s)
+            ''',(uid, lname, restid))
+            cursor.close()
+        except:
+            pass
+    return redirect('/restaurants/' + restid)
+
+@user_bp.route('/deleteReview/<dt>/<restid>', methods=['DELETE'])
+@login_required
+def removeReview(dt, restid):
     if request.method == 'DELETE':
         _, uid = current_user.id.split(" ")
         try:
             cursor = g.conn.execute('''
-                DELETE FROM Write_Review_About WHERE dt=%s AND restid=%s AND did=%s AND comments=%s
-            ''',(dt, restid, uid, comments))
+                DELETE FROM Write_Review_About WHERE dt=%s AND restid=%s AND did=%s
+            ''',(dt, restid, uid))
+            cursor.close()
+
+            cursor = g.conn.execute('''
+                UPDATE Restaurants SET stars=(SELECT AVG(star) FROM Write_Review_About WHERE restid=%s) WHERE restid=%s
+            ''',(restid, restid))
             cursor.close()
             return "delete successfully!"
         except:
             return "delete not successfully!"
-
