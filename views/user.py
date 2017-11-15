@@ -65,11 +65,11 @@ def listRemoveRestaurant(lname, restid):
 @user_bp.route('/addReview', methods=['POST'])
 @login_required
 def addReview():
+    restid = request.form['restid']
     if request.method == 'POST' and request.form['comment'] and request.form['star']:
         _, uid = current_user.id.split(" ")
         comments = request.form['comment']
         star = request.form['star']
-        restid = request.form['restid']
         from datetime import date
         today = date.today()
         try:
